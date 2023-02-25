@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="h1 my-5">Site: {{ url[1] }}</h1>
+    <table class="table table-hover table-bordered table-responsive my-5">
+        <tr>
+            <td>ID</td>
+            <td>{{ url[0] }}</td>
+        </tr>
+        <tr>
+            <td>name</td>
+            <td>{{ url[1] }}</td>
+        </tr>
+        <tr>
+            <td>created_at</td>
+            <td>{{ url[2] }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
