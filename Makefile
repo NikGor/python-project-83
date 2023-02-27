@@ -13,6 +13,15 @@ package-reinstall:
 package-uninstall:
 	python3 -m pip uninstall --yes dist/*.whl
 
+test:
+	poetry run pytest
+
+test-coverage:
+	poetry run pytest --cov=page_analyzer --cov-report xml
+
+coverage-missing:
+	poetry run pytest --cov-report term-missing --cov=page_analyzer
+
 dev:
 	poetry run flask --app page_analyzer:app --debug run
 
@@ -29,3 +38,5 @@ selfcheck:
 check: selfcheck lint #test
 
 .PHONY: install build publish
+
+ALL: lint install coverage-missing build
