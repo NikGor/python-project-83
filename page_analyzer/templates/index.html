@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Page Analyzer{% endblock %}
 {% block content %}
-</header>
 {% include "bar.html" %}
 <div class="container d-flex flex-column justify-content-center align-items-center py-5">
     <form class="col-md-6 mb-4" method="post">
@@ -9,7 +8,7 @@
         <div class="input-group">
             <input type="text" name="url" class="form-control" placeholder="https://www.example.com">
             <div class="input-group-append">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary btn-lg text-uppercase" value="Проверить">
             </div>
         </div>
     </form>
