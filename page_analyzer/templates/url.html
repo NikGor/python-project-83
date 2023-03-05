@@ -6,21 +6,21 @@
     <table class="table table-hover table-bordered table-responsive my-5 py-5" data-test="url">
         <tr>
             <td>ID</td>
-            <td>{{ url[0] }}</td>
+            <td>{{ url.id }}</td>
         </tr>
         <tr>
             <td>Имя</td>
-            <td>{{ url[1] }}</td>
+            <td>{{ url.name }}</td>
         </tr>
         <tr>
             <td>Дата создания</td>
-            <td>{{ url[2] }}</td>
+            <td>{{ url.created_at }}</td>
         </tr>
         </tbody>
     </table>
     <div>
         <h2 class="my-5">Проверки</h2>
-        <form method="post" action="/url/{{ url[0] }}/checks">
+        <form method="post" action="/url/{{ url.id }}/checks">
             <input type="hidden">
             <input type="submit" class="btn btn-primary" value="Запустить проверку">
         </form>
@@ -40,12 +40,12 @@
             <tbody>
                 {% for check in url_checks %}
                 <tr>
-                    <td>{{ check[0] }}</td>
-                    <td>{{ check[2] }}</td>
-                    <td>{{ check[3] }}</td>
-                    <td>{{ check[4] }}</td>
-                    <td>{{ check[5] }}</td>
-                    <td>{{ check[6] }}</td>
+                    <td>{{ check.id }}</td>
+                    <td>{{ check.status_code }}</td>
+                    <td>{{ check.h1 }}</td>
+                    <td>{{ check.title }}</td>
+                    <td>{{ check.description }}</td>
+                    <td>{{ check.created_at }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

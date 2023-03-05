@@ -1,3 +1,4 @@
+from datetime import datetime
 from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
@@ -41,3 +42,7 @@ def analyze_url(url):
                 if description and 'content' in description.attrs else None}
     except requests.exceptions.RequestException as e:
         raise Exception(f'Ошибка при проверке сайта: {e}')
+
+
+def get_current_date():
+    return datetime.now().strftime('%Y-%m-%d')
