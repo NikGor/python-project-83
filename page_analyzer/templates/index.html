@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Page Analyzer{% endblock %}
 {% block content %}
 {% include "bar.html" %}
 <div class="container d-flex flex-column justify-content-center align-items-center py-5">
-    <form class="col-md-6 mb-4" method="post">
+    <form action="/urls" class="col-md-6 mb-4" method="post">
         <input type="hidden">
         <div class="input-group">
             <input type="text" name="url" class="form-control" placeholder="https://www.example.com">

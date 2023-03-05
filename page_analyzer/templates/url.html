@@ -2,7 +2,7 @@
 {% block content %}
 {% include "bar.html" %}
 <div class="container">
-    <h1 class="h1 my-5">Сайт: {{ url[1] }}</h1>
+    <h1 class="h1 my-5">Сайт: {{ url.name }}</h1>
     <table class="table table-hover table-bordered table-responsive my-5 py-5" data-test="url">
         <tr>
             <td>ID</td>
@@ -52,6 +52,4 @@
         </table>
     </div>
 </div>
-
-
 {% endblock %}

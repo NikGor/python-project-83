@@ -10,12 +10,20 @@ from page_analyzer.utils import is_valid, \
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = os.urandom(24)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    if request.method == 'POST':
+    return render_template('index.html')
+
+
+@app.route('/urls', methods=['GET', 'POST'])
+def urls():
+    if request.method == 'GET':
+        data = Url.get_all()
+        return render_template('urls.html', data=data)
+    elif request.method == 'POST':
         url = request.form.get('url')
         if is_valid(url):
             normalized_url = normalize_url(url)
@@ -29,34 +37,31 @@ def index():
                 flash('Страница уже существует', 'warning')
             return redirect(url_for('url', url_id=url_obj.id))
         flash('Некорректный URL!', 'danger')
-        return redirect(url_for('index'))
-    return render_template('index.html')
-
-
-@app.route('/urls')
-def urls():
-    data = Url.get_all()
-    return render_template('urls.html', data=data)
+        return render_template('index.html'), 422
 
 
 @app.route('/urls/<int:url_id>')
 def url(url_id):
-    url_obj = Url(url_id).get()
+    url = Url(url_id).get()
     url_checks = UrlCheck.get_by_url_id(url_id)
-    return render_template('url.html', url=url_obj, url_checks=url_checks)
+    if not url:
+        return render_template('404.html')
+    return render_template('url.html', url=url, url_checks=url_checks)
 
 
-@app.route('/url/<int:id>/checks', methods=['POST'])
-def url_checks(id):
-    url_obj = Url(id).get()
+@app.route('/url/<int:url_id>/checks', methods=['POST'])
+def url_checks(url_id):
+    url = Url(url_id).get()
+    if not url:
+        return render_template('404.html')
     try:
-        status_code = check_website(url_obj.name)
-        analysis = analyze_url(url_obj.name)
+        status_code = check_website(url.name)
+        analysis = analyze_url(url.name)
     except Exception:
         flash('Произошла ошибка при проверке', 'danger')
-        return redirect(url_for('url', url_id=id))
+        return redirect(url_for('url', url_id=url_id)), 500
     UrlCheck.create(
-        url_id=id,
+        url_id=url_id,
         status_code=status_code,
         created_at=datetime.now().strftime('%Y-%m-%d'),
         title=analysis['title'],
@@ -64,7 +69,12 @@ def url_checks(id):
         description=analysis['description']
     )
     flash('Страница успешно проверена', 'success')
-    return redirect(url_for('url', url_id=id))
+    return redirect(url_for('url', url_id=url_id))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
