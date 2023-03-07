@@ -10,7 +10,7 @@ from page_analyzer.utils import is_valid, \
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = 'secret_key'
 
 
 @app.route('/')
@@ -59,7 +59,7 @@ def url_checks(url_id):
         analysis = analyze_url(url.name)
     except Exception:
         flash('Произошла ошибка при проверке', 'danger')
-        return redirect(url_for('url', url_id=url_id)), 500
+        return redirect(url_for('url', url_id=url_id))
     UrlCheck.create(
         url_id=url_id,
         status_code=status_code,
