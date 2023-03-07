@@ -10,3 +10,4 @@ coverage.xml
 .idea/
 page_analyzer/tmp.py
 page_analyzer/scripts
+.env
