@@ -1,4 +1,4 @@
-from page_analyzer.models.db import Database
+from page_analyzer.db import Database
 
 
 class UrlCheck:

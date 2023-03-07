@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-{% include "bar.html" %}
 <div class="container">
     <h1 class="h1 my-5">Сайт: {{ url.name }}</h1>
     <table class="table table-hover table-bordered table-responsive my-5 py-5" data-test="url">
@@ -20,14 +19,14 @@
     </table>
     <div>
         <h2 class="my-5">Проверки</h2>
-        <form method="post" action="/url/{{ url.id }}/checks">
+        <form method="post" action="{{ url_for('url_checks', url_id=url.id) }}">
             <input type="hidden">
             <input type="submit" class="btn btn-primary" value="Запустить проверку">
         </form>
     </div>
     <div>
         <table class="table table-hover table-bordered table-responsive my-5 py-5" data-test="checks">
-            <thead>
+            <tbody>
                 <tr>
                     <th>ID</th>
                     <th>Код ответа</th>
@@ -36,16 +35,14 @@
                     <th>description</th>
                     <th>Дата создания</th>
                 </tr>
-            </thead>
-            <tbody>
                 {% for check in url_checks %}
                 <tr>
-                    <td>{{ check.id }}</td>
-                    <td>{{ check.status_code }}</td>
-                    <td>{{ check.h1 }}</td>
-                    <td>{{ check.title }}</td>
-                    <td>{{ check.description }}</td>
-                    <td>{{ check.created_at }}</td>
+                    <td>{{ check.id or '' }}</td>
+                    <td>{{ check.status_code or '' }}</td>
+                    <td>{{ check.h1 or '' }}</td>
+                    <td>{{ check.title or '' }}</td>
+                    <td>{{ check.description or '' }}</td>
+                    <td>{{ check.created_at or '' }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

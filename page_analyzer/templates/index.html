@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-{% include "bar.html" %}
 <div class="container d-flex flex-column justify-content-center align-items-center py-5">
-    <form action="/urls" class="col-md-6 mb-4" method="post">
+    <form action="{{ url_for('urls') }}" class="col-md-6 mb-4" method="post">
         <input type="hidden">
         <div class="input-group">
-            <input type="text" name="url" class="form-control" placeholder="https://www.example.com">
+            <input type="text" name="url" class="form-control" placeholder="https://www.example.com"
+                   value="{{ input_url|default('', true) }}">
             <div class="input-group-append">
                 <input type="submit" class="btn btn-primary btn-lg text-uppercase" value="Проверить">
             </div>
+
         </div>
     </form>
     <p class="text-center text-muted mb-0">Check website SEO suitability for free</p>

@@ -4,13 +4,15 @@ from flask import Flask, render_template, flash, redirect, url_for, request
 from datetime import datetime
 from page_analyzer.models.url import Url
 from page_analyzer.models.url_check import UrlCheck
-from page_analyzer.utils import is_valid, \
-    analyze_url, check_website, normalize_url, get_current_date
+from page_analyzer.date_utils import get_current_date
+from page_analyzer.url_check_utils import check_website, analyze_url
+from page_analyzer.url_utils import is_valid, normalize_url
+
 
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 @app.route('/')
@@ -37,7 +39,7 @@ def urls():
                 flash('Страница уже существует', 'warning')
             return redirect(url_for('url', url_id=url_obj.id))
         flash('Некорректный URL!', 'danger')
-        return render_template('index.html'), 422
+        return render_template('index.html', input_url=url), 422
 
 
 @app.route('/urls/<int:url_id>')
@@ -59,7 +61,7 @@ def url_checks(url_id):
         analysis = analyze_url(url.name)
     except Exception:
         flash('Произошла ошибка при проверке', 'danger')
-        return redirect(url_for('url', url_id=url_id)), 500
+        return redirect(url_for('url', url_id=url_id))
     UrlCheck.create(
         url_id=url_id,
         status_code=status_code,
