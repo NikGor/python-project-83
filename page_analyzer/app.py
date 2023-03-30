@@ -2,12 +2,11 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, flash, redirect, url_for, request
 from datetime import datetime
-from page_analyzer.models.url import Url
 from page_analyzer.models.url_check import UrlCheck
-from page_analyzer.date_utils import get_current_date
-from page_analyzer.url_check_utils import check_website, analyze_url
-from page_analyzer.url_utils import is_valid, normalize_url
-
+from page_analyzer.utils.date_utils import get_current_date
+from page_analyzer.models.url import Url
+from page_analyzer.utils.url_check_utils import check_website, analyze_url
+from page_analyzer.utils.url_utils import is_valid, normalize_url
 
 load_dotenv()
 
