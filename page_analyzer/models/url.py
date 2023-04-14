@@ -18,6 +18,7 @@ class Url:
                 return self
             return None
 
+    @staticmethod
     def get_by_name(name):
         with Database() as cursor:
             query = "SELECT * FROM urls WHERE name = %s LIMIT 1"
@@ -27,6 +28,7 @@ class Url:
                 return Url(*row)
             return None
 
+    @staticmethod
     def get_all():
         with Database() as cursor:
             query = """
@@ -47,6 +49,7 @@ class Url:
             rows = cursor.fetchall()
             return rows
 
+    @staticmethod
     def create(name, created_at):
         with Database() as cursor:
             query = """

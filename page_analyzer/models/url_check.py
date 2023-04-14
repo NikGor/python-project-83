@@ -13,6 +13,7 @@ class UrlCheck:
         self.h1 = h1
         self.description = description
 
+    @staticmethod
     def get_by_url_id(url_id):
         with Database() as cursor:
             query = """
@@ -23,6 +24,7 @@ class UrlCheck:
             rows = cursor.fetchall()
             return rows
 
+    @staticmethod
     def create(url_id, status_code, created_at, title, h1, description):
         with Database() as cursor:
             query = """
