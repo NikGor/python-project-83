@@ -5,7 +5,11 @@ from datetime import datetime
 from page_analyzer.models.url_check import UrlCheck
 from page_analyzer.utils.date import get_current_date
 from page_analyzer.models.url import Url
-from page_analyzer.utils.url_check import check_website, analyze_url
+from page_analyzer.utils.url_check import (check_status, analyze_url,
+                                           check_load_time, check_semantic_tags,
+                                           check_robots_and_sitemap,
+                                           check_links_on_page,
+                                           check_alt_texts)
 from page_analyzer.utils.url import is_valid, normalize_url
 
 load_dotenv()
@@ -52,23 +56,38 @@ def url(url_id):
 
 @app.route('/url/<int:url_id>/checks', methods=['POST'])
 def url_checks(url_id):
-    url = Url(url_id).get()
-    if not url:
+    url_instance = Url(url_id).get()
+    if not url_instance:
         return render_template('404.html')
+
+    url_name = url_instance.name
+
     try:
-        status_code = check_website(url.name)
-        analysis = analyze_url(url.name)
+        status_code = check_status(url_name)
+        analysis = analyze_url(url_name)
+        load_time = check_load_time(url_name)
+        semantic_tags = check_semantic_tags(url_name)
+        robots_and_sitemap = check_robots_and_sitemap(url_name)
+        links_statuses = check_links_on_page(url_name)
+        alt_texts = check_alt_texts(url_name)
     except Exception:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('url', url_id=url_id))
+
     UrlCheck.create(
         url_id=url_id,
         status_code=status_code,
         created_at=datetime.now().strftime('%Y-%m-%d'),
-        title=analysis['title'],
-        h1=analysis['h1'],
-        description=analysis['description']
+        title=analysis.get('title'),
+        h1=analysis.get('h1'),
+        description=analysis.get('description'),
+        load_time=load_time,
+        semantic_tags=','.join(semantic_tags),
+        robots_and_sitemap='\n '.join(robots_and_sitemap),
+        links_statuses=','.join(links_statuses),
+        alt_texts=','.join(alt_texts)
     )
+
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('url', url_id=url_id))
 

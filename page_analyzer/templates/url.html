@@ -26,15 +26,22 @@
     </div>
     <div>
         <table class="table table-hover table-bordered table-responsive my-5 py-5" data-test="checks">
-            <tbody>
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Код ответа</th>
                     <th>h1</th>
                     <th>title</th>
                     <th>description</th>
+                    <th>load time</th>
+                    <th>semantic tags</th>
+                    <th>robots.txt & sitemap.xml</th>
+                    <th>corrupted links</th>
+                    <th>alt texts</th>
                     <th>Дата создания</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for check in url_checks %}
                 <tr>
                     <td>{{ check.id or '' }}</td>
@@ -42,6 +49,29 @@
                     <td>{{ check.h1 or '' }}</td>
                     <td>{{ check.title or '' }}</td>
                     <td>{{ check.description or '' }}</td>
+                    <td>{{ check.load_time or '' }}</td>
+                    <td>
+                    {% if check.semantic_tags %}
+                      {% for tag in check.semantic_tags.split(',') %}
+                        {{ tag }}<br>
+                      {% endfor %}
+                    {% endif %}
+                    </td>
+                    <td>{{ check.robots_and_sitemap }}</td>
+                    <td>
+                        {% if check.links_statuses %}
+                          {% for link in check.links_statuses.split(',') %}
+                            {{ link }}<br>
+                          {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if check.alt_texts %}
+                            {% for alt_text in check.alt_texts.split(',') %}
+                                {{ alt_text }}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
                     <td>{{ check.created_at or '' }}</td>
                 </tr>
                 {% endfor %}
